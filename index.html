@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app; frame-src https://*.firebaseapp.com; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Repartidores Apizaco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header id="bar" hidden>
+  <div id="estado"><span class="dot"></span><span id="estadoTxt">Sin conexión</span></div>
+  <button id="salir" class="btn" type="button">Cerrar sesión</button>
+</header>
+
+<main id="carga"><p class="vacio">Cargando…</p></main>
+
+<main id="login" hidden>
+  <h1>Repartidores Apizaco</h1>
+  <form id="loginForm" novalidate>
+    <label class="lbl reg" for="nombre" hidden>Nombre completo</label>
+    <input id="nombre" class="reg" type="text" maxlength="60" autocomplete="name" hidden>
+    <label class="lbl reg" for="tel" hidden>Teléfono (10 dígitos)</label>
+    <input id="tel" class="reg" type="tel" inputmode="numeric" maxlength="15" autocomplete="tel-national" hidden>
+    <label class="lbl" for="email">Correo</label>
+    <input id="email" type="email" autocomplete="username" autocapitalize="off" maxlength="100" required>
+    <label class="lbl" for="pass">Contraseña</label>
+    <input id="pass" type="password" autocomplete="current-password" maxlength="128" required>
+    <label class="lbl reg" for="pass2" hidden>Repite la contraseña</label>
+    <input id="pass2" class="reg" type="password" autocomplete="new-password" maxlength="128" hidden>
+    <p id="loginErr" class="err" role="alert"></p>
+    <button id="entrar" class="btn pri cta mt" type="submit">Entrar</button>
+  </form>
+  <button id="modo" class="btn txt" type="button">Crear cuenta</button>
+
+  <div class="demoBox" id="demoBox" hidden>
+    <p class="lbl">¿Solo quieres ver el diseño antes de conectar Firebase?</p>
+    <button id="demoBtn" class="btn" type="button">Entrar en vista previa (datos de ejemplo)</button>
+  </div>
+</main>
+
+<main id="pendiente" hidden>
+  <h1>Cuenta en revisión</h1>
+  <p>Tu cuenta está creada, pero aún no está aprobada como repartidor. Verás los pedidos cuando el administrador la apruebe.</p>
+  <p id="pendErr" class="err" role="alert"></p>
+  <button id="verificar" class="btn pri cta" type="button">Verificar aprobación</button>
+  <button id="salir2" class="btn txt" type="button">Cerrar sesión</button>
+</main>
+
+<main id="app" hidden>
+  <div class="tabs">
+    <button class="btn" type="button" data-t="2" aria-selected="true">Por recoger (<span id="c2">0</span>)</button>
+    <button class="btn" type="button" data-t="3" aria-selected="false">En camino (<span id="c3">0</span>)</button>
+  </div>
+  <div class="ajustes" id="ajustes"><button id="cambiarPin" class="btn txt" type="button">Cambiar NIP</button></div>
+  <div id="lista" aria-live="polite"></div>
+</main>
+
+<div id="pinModal" class="overlay" hidden>
+  <div class="modalBox" role="dialog" aria-modal="true" aria-labelledby="pinTitle">
+    <h2 id="pinTitle">NIP</h2>
+    <p id="pinDesc" class="lbl"></p>
+    <input id="pinInput" class="pinInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off">
+    <input id="pinInput2" class="pinInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" hidden placeholder="Repite el NIP">
+    <p id="pinErr" class="err" role="alert"></p>
+    <div class="row">
+      <button id="pinCancel" class="btn" type="button">Cancelar</button>
+      <button id="pinOk" class="btn pri" type="button">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

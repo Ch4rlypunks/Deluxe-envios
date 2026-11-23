@@ -1,0 +1,53 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "repartidores": {
+      "$uid": { ".read": "auth != null && auth.uid === $uid" }
+    },
+    "pines": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid && root.child('repartidores').child(auth.uid).val() === true",
+        ".validate": "newData.hasChildren(['hash','salt','actualizadoEn'])",
+        "hash": { ".validate": "newData.isString() && newData.val().matches(/^[0-9a-f]{64}$/)" },
+        "salt": { ".validate": "newData.isString() && newData.val().matches(/^[0-9a-f]{32}$/)" },
+        "actualizadoEn": { ".validate": "newData.isNumber()" },
+        "$otro": { ".validate": false }
+      }
+    },
+    "solicitudes": {
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid && !data.exists()",
+        ".validate": "newData.hasChildren(['nombre','telefono','email','creadoEn'])",
+        "nombre": { ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 60" },
+        "telefono": { ".validate": "newData.isString() && newData.val().matches(/^[0-9]{10}$/)" },
+        "email": { ".validate": "newData.isString() && newData.val() === auth.token.email" },
+        "creadoEn": { ".validate": "newData.isNumber()" },
+        "$otro": { ".validate": false }
+      }
+    },
+    "pedidos": {
+      ".read": "auth != null && root.child('repartidores').child(auth.uid).val() === true",
+      ".indexOn": ["estado"],
+      "$id": {
+        "estado": {
+          ".write": "auth != null && root.child('repartidores').child(auth.uid).val() === true && (!data.parent().child('repartidorUid').exists() || data.parent().child('repartidorUid').val() === auth.uid)",
+          ".validate": "newData.isNumber() && ((data.val() === 2 && newData.val() === 3) || (data.val() === 3 && newData.val() === 4))"
+        },
+        "repartidorUid": {
+          ".write": "auth != null && root.child('repartidores').child(auth.uid).val() === true && (!data.exists() || data.val() === auth.uid)",
+          ".validate": "newData.val() === auth.uid"
+        },
+        "seguimiento": {
+          ".write": "auth != null && root.child('repartidores').child(auth.uid).val() === true",
+          ".validate": "newData.isString() && newData.val().length <= 300 && (newData.val().matches(/^https:\\/\\/[^\\s]+$/) || newData.val().matches(/^[A-Za-z0-9-]{4,40}$/))"
+        },
+        "actualizadoEn": {
+          ".write": "auth != null && root.child('repartidores').child(auth.uid).val() === true",
+          ".validate": "newData.isNumber()"
+        }
+      }
+    }
+  }
+}
